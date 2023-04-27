@@ -1,5 +1,7 @@
+import { useDispatch } from 'react-redux';
 import { Row, Tag, Checkbox } from 'antd';
 import { useState } from 'react';
+import todoSlice from '../TodoList/todoSlice';
 
 const priorityColorMapping = {
   High: 'red',
@@ -7,11 +9,13 @@ const priorityColorMapping = {
   Low: 'gray',
 };
 
-export default function Todo({ name, prioriry }) {
-  const [checked, setChecked] = useState(false);
+export default function Todo({ name, prioriry,completed, id }) {
+  const dispatch=useDispatch();
+  const [checked, setChecked] = useState(completed);
 
   const toggleCheckbox = () => {
     setChecked(!checked);
+    dispatch(todoSlice.actions.toggleStatusChange(id));
   };
 
   return (

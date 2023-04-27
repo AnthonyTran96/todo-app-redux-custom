@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { Col, Row, Input, Button, Select, Tag } from 'antd';
 import {v4 as uuidv4} from 'uuid';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Todo from '../Todo';
 import todoSlice from './todoSlice';
+import { todosRemainingSelector } from '../../redux/selectors';
 
 export default function TodoList() {
   const dispatch=useDispatch();
 
   const [searchText,setSearchText]=useState('');
-  const [searchPriority,setSearchPriority]=useState([]);
+  const [searchPriority,setSearchPriority]=useState('Medium');
 
   const handleSearchTextChange=(e)=>{
     setSearchText(e.target.value);
@@ -25,12 +26,17 @@ export default function TodoList() {
       priority:searchPriority,
     }))
   }
+
+  const todoList=useSelector(todosRemainingSelector);
   return (
     <Row style={{ height: 'calc(100% - 40px)' }}>
       <Col span={24} style={{ height: 'calc(100% - 40px)', overflowY: 'auto' }}>
-        <Todo name='Learn React' prioriry='High' />
-        <Todo name='Learn Redux' prioriry='Medium' />
-        <Todo name='Learn JavaScript' prioriry='Low' />
+        {todoList.map((todo)=>
+          <Todo name={todo.name} 
+                prioriry={todo.priority} 
+                key={todo.id} id={todo.id} 
+                completed={todo.completed}/>
+        )}
       </Col>
       <Col span={24}>
         <Input.Group style={{ display: 'flex' }} compact>
