@@ -1,10 +1,26 @@
-import {createServer} from 'miragejs';
+import {createServer, Model} from 'miragejs';
 
 export const setupServer=()=>{
-    let server = createServer()
-    server.get("/api/todos", { todos: [
-        {id: 1, name:'Learn React', completed: false, priority: 'High'},
-        {id: 2, name:'Learn Redux', completed: true, priority: 'Medium'},
-        {id: 3, name:'Learn Yoga', completed: false, priority: 'Low'},
-    ] })
+     // eslint-disable-next-line
+    let server = createServer({
+        models:{
+            todos: Model
+        },
+        routes(){
+            this.get('/api/todos', (schema)=>{
+                return schema.todos.all();
+            });
+            this.post('/api/todos',(schema,request)=>{
+                const payload =JSON.parse(request.requestBody);
+                return schema.todos.create(payload);
+            });
+            this.post('/api/updateTodo',(schema, request)=>{
+                const id=JSON.parse(request.requestBody);
+                const currentTodo=schema.todos.find(id);
+                currentTodo.update({completed: !currentTodo.completed});
+                return currentTodo;
+            })
+        }
+    })
+    
 }

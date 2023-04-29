@@ -4,17 +4,21 @@ import TodoList from './components/TodoList';
 import Filters from './components/Filters';
 import { setupServer } from './fakeApi';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchTodos } from './components/TodoList/todoSlice';
 
-setupServer();
+if(process.env.NODE_ENV==='development'){
+  setupServer();
+}
+
 
 const { Title } = Typography;
 
 function App() {
+  const dispatch=useDispatch();
   useEffect(()=>{
-    fetch('api/todos')
-    .then(res=>res.json())
-    .then(res=>console.log(res));
-  },[])
+    dispatch(fetchTodos());
+  },[]);
   return (
     <div
       style={{

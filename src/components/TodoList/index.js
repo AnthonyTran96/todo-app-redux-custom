@@ -3,7 +3,7 @@ import { Col, Row, Input, Button, Select, Tag } from 'antd';
 import {v4 as uuidv4} from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 import Todo from '../Todo';
-import todoSlice from './todoSlice';
+import  { addNewTodo } from './todoSlice';
 import { todosRemainingSelector } from '../../redux/selectors';
 
 export default function TodoList() {
@@ -19,12 +19,28 @@ export default function TodoList() {
     setSearchPriority(value);
   }
   const handleAddTodoBtn=()=>{
-    dispatch(todoSlice.actions.addTodo({
+    // dispatch(
+    //   todoSlice.actions.addTodo({
+    //   
+    //   name: searchText,
+    //   completed: false,
+    //   priority:searchPriority,
+    // }));
+    // dispatch(addTodo({
+    //       id: uuidv4(),
+    //       name: searchText,
+    //       completed: false,
+    //       priority:searchPriority,
+    //     }
+    // ))
+    dispatch(addNewTodo({
       id: uuidv4(),
       name: searchText,
       completed: false,
       priority:searchPriority,
     }))
+    setSearchText('');
+    setSearchPriority('Medium');
   }
 
   const todoList=useSelector(todosRemainingSelector);
